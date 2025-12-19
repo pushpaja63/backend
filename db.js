@@ -1,21 +1,26 @@
 // db.js
-console.log("ENV USER:", process.env.DB_USER);
-console.log("ENV PASS:", process.env.DB_PASSWORD);
-console.log("ENV DB:", process.env.DB_NAME);
+require("dotenv").config();
+const mysql = require("mysql2/promise");
 
-require('dotenv').config();
-const mysql = require('mysql2/promise');
+// Debug (temporary, remove later)
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_NAME:", process.env.DB_NAME);
+
+if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_NAME) {
+  throw new Error("❌ Missing database environment variables");
+}
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST,
   port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'root',  // change if you use another password
-  database: process.env.DB_NAME || 'testdb',      // must match the DB you created
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  charset: 'utf8mb4'
+  charset: "utf8mb4"
 });
 
 module.exports = pool;
