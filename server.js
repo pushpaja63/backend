@@ -150,3 +150,6 @@ const pool = require("./db");
     console.error("❌ Table creation error:", err.message);
   }
 })();
+app.get("/ping", (req, res) => {
+  res.json({ status: "ok" });
+});
